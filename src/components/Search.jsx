@@ -1,16 +1,16 @@
 /**
  * @Author: Aris Setyono <aris>
- * @Date:   Monday, June 5th 2017, 8:49:24 pm
+ * @Date:   Tuesday, June 6th 2017, 10:08:34 pm
  * @Email:  ariez.id@gmail.com
- * @Filename: Repositories.jsx
+ * @Filename: Search.jsx
  * @Last modified by:   aris
- * @Last modified time: Monday, June 5th 2017, 8:49:31 pm
+ * @Last modified time: Tuesday, June 6th 2017, 10:08:48 pm
  */
 
 import React, { Component } from 'react';
 import Moment from 'react-moment';
 
-class Repositories extends Component {
+class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,24 +19,37 @@ class Repositories extends Component {
     }
 
     componentWillMount(){
-        this.fetchData();
+        let query = this.getParameterByName('q')
+        if (query) {
+            this.fetchData(query);
+        }
     }
 
-    fetchData(){
-        let user = this.props.userName
+    /**
+     * https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+     */
+    getParameterByName(name) {
+        var url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
-        fetch('https://api.github.com/users/'+user+'/repos').then(function(resp){
+    fetchData(query){
+        fetch('https://api.github.com/search/repositories?q='+query).then(function(resp){
             return resp.json();
         })
         .then(function(j){
             this.setState({
-                data    : j
+                data    : j.items
             })
         }.bind(this));
     }
 
     render(){
-        let user = this.props.userName
         let list = this.state.data.map(function(data, i) {
                  return (
                      <li key={i}>
@@ -46,7 +59,7 @@ class Repositories extends Component {
                                 Updated on <Moment format="ll">{data.pushed_at}</Moment>
                              </span>
                              <h3 className="timeline-header">
-                                <a href={'/'+user+'/repos/'+data.name}>{data.name}</a>
+                                <a href={data.owner.login+'/repos/'+data.name}>{data.name}</a>
                             </h3>
                              <div className="timeline-body">
                                  {data.description}
@@ -61,7 +74,7 @@ class Repositories extends Component {
              });
 
         return (
-            <div className="col-md-8">
+            <div className="col-md-12">
                 <ul className="timeline">
                     {list}
                 </ul>
@@ -70,4 +83,4 @@ class Repositories extends Component {
     }
 }
 
-export default Repositories;
+export default Search;

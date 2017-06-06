@@ -30,15 +30,15 @@ class UserInfo extends Component {
     }
 
     componentWillMount(){
-        this.fetchData();
+        let user = this.props.userName
+        this.fetchData(user);
     }
 
-    fetchData(){
-        fetch('https://api.github.com/users/andhikamaheva').then(function(resp){
+    fetchData(user){
+        fetch('https://api.github.com/users/'+user).then(function(resp){
             return resp.json();
         })
         .then(function(j){
-            // console.log(j);
             this.setState({
                 image   : j.avatar_url,
                 name    : j.name,
@@ -57,28 +57,34 @@ class UserInfo extends Component {
     }
 
     render(){
-        // console.log(this.state);
+        let user = 'andhikamaheva'
+        if (this.props.userName) {
+            user = this.props.userName
+        }
+
+        let _class = this.props.path ? 'col-md-4' : 'col-md-12'
+
         return (
-            <div className="col-md-4">
+            <div className={_class}>
                 <div className="box box-widget widget-user-2">
                     <div className="widget-user-header bg-aqua-active">
                       <div className="widget-user-image">
                         <img className="img-circle" src={this.state.image} alt="User Avatar" />
                       </div>
-                      <h3 className="widget-user-username">{this.state.name}  @{this.state.login}</h3>
-                      <h5 className="widget-user-desc">Company : {this.state.company}</h5>
-                      <h5 className="widget-user-desc">Location : {this.state.location}</h5>
-                      <h5 className="widget-user-desc">Email : {this.state.email}</h5>
-                      <h5 className="widget-user-desc">Blog : {this.state.blog}</h5>
+                      <h3 className="widget-user-username">{this.state.name}  <br/>@{this.state.login}</h3>
+                      {this.state.company ? (<h5 className="widget-user-desc">Company : {this.state.company}</h5>) : ''}
+                      {this.state.location ? (<h5 className="widget-user-desc">Location : {this.state.location}</h5>) : ''}
+                      {this.state.email ? (<h5 className="widget-user-desc">Email : {this.state.email}</h5>) : ''}
+                      {this.state.blog ? (<h5 className="widget-user-desc">Blog : {this.state.blog}</h5>) : ''}
                       <h5 className="widget-user-desc">{this.state.bio}</h5>
                     </div>
                     <div className="box-footer no-padding">
                       <ul className="nav nav-stacked">
-                        <li><Link to="/">Overview</Link></li>
-                        <li><Link to="/repositories">Repositories <span className="pull-right badge bg-aqua">{this.state.public_repos}</span></Link></li>
-                        <li><Link to="/stars">Stars <span className="pull-right badge bg-green">{this.state.stars}</span></Link></li>
-                        <li><Link to="/followers">Followers <span className="pull-right badge bg-red">{this.state.followers}</span></Link></li>
-                        <li><Link to="/following">Following <span className="pull-right badge bg-yellow">{this.state.following}</span></Link></li>
+                        <li><Link to={'/'+user+'/'}>Overview</Link></li>
+                        <li><Link to={'/'+user+'/repositories'}>Repositories <span className="pull-right badge bg-aqua">{this.state.public_repos}</span></Link></li>
+                        <li><Link to={'/'+user+'/stars'}>Stars <span className="pull-right badge bg-green">{this.state.stars}</span></Link></li>
+                        <li><Link to={'/'+user+'/followers'}>Followers <span className="pull-right badge bg-red">{this.state.followers}</span></Link></li>
+                        <li><Link to={'/'+user+'/following'}>Following <span className="pull-right badge bg-yellow">{this.state.following}</span></Link></li>
                       </ul>
                     </div>
                 </div>
