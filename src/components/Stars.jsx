@@ -36,6 +36,7 @@
      }
 
      render(){
+         let user = this.props.userName
          let list = this.state.data.map(function(data, i) {
                   return (
                       <li key={i}>
@@ -45,7 +46,7 @@
                                  Updated <Moment fromNow ago>{data.pushed_at}</Moment> ago
                               </span>
                               <h3 className="timeline-header">
-                                 <a target="_blank" href={data.html_url}>{data.name}</a>
+                                 <a href={'/'+user+'/repos/'+data.name}>{data.name}</a>
                              </h3>
                               <div className="timeline-body">
                                   {data.description}

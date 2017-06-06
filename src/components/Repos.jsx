@@ -39,7 +39,6 @@ class Repos extends Component {
     render(){
         let user = this.props.userName
         let data = this.state.data
-        console.log(data);
 
         return (
             <div className="col-md-8">
