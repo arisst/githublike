@@ -57,10 +57,7 @@ class UserInfo extends Component {
     }
 
     render(){
-        let user = 'andhikamaheva'
-        if (this.props.userName) {
-            user = this.props.userName
-        }
+        let user = this.props.userName
 
         let _class = this.props.path ? 'col-md-4' : 'col-md-12'
 
