@@ -1,6 +1,6 @@
 ## How to Install
 
 - Clone
-- Run this command
-### `npm install`
-### `npm start`
+- Run `npm install`
+- Run `npm start`
+- Open in your web browser (http://localhost:3000)
